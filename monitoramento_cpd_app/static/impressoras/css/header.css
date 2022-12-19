@@ -1,0 +1,163 @@
+*{
+    margin: 0;
+    padding: 0;
+    font-family: 'Montserrat', sans-serif;
+    font-family: 'Noto Sans', sans-serif;
+}
+
+body{
+    background-color: orange;
+    font-family: 'Montserrat', sans-serif;
+}
+
+div{
+    align-items:center;
+    list-style-type:none;
+}
+path{
+    fill: blueviolet;
+}
+
+header{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-content: space-evenly;
+    align-items: center;
+    height: 40px;
+    background-color: white;
+    border-bottom: 3px solid blueviolet;
+}
+
+nav {
+    display: flex;
+    align-content: center;
+    align-items: center;
+    text-align: center;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: center;
+}
+
+nav a{
+    display: block;
+    text-align: center;
+    align-items: center;
+    background-color: white;
+    width: 100px;
+    margin-left: 10px;
+    padding: 10px 40px;
+    color: blueviolet;
+    text-decoration: none;
+    font-family: 'Montserrat', sans-serif;
+}
+
+a:hover{
+    color: grey;
+}
+
+#cadastrada{
+    display: flex;
+    width: 100px;
+    height: 60px;
+    background-color: orange;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    align-content: center;
+}
+
+#cadastrada a{
+    font-family: 'Montserrat', sans-serif;
+    list-style: none;
+    font-size: 12px;
+    font-weight: bold;
+    text-decoration: none;
+    color: white;
+    align-items: center;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+input#cadastrada {
+    background-image: url(../svg/printer1.png);
+    background-repeat: no-repeat;
+    background-position: 50%;
+    background-color: white;
+    font-family: 'Montserrat', sans-serif;
+    cursor: pointer;
+    width: 10vw;
+    height: 8vh;
+    border: none;
+}
+
+input#cadastrada:hover {
+    transition: 2s;
+    background-image: url(../svg/printer2.png);
+    background-repeat: no-repeat;
+    background-position: 50%;
+    background-color: white;
+    cursor: pointer;
+    width: 10vw;
+    height: 8vh;
+    border: none;
+}
+/* PARTE PARA REMOÇAO DA UNIDADE IMPRESSORA NO INPUT------
+#delete{
+
+    display: flex;
+    width: 100px;
+    height: 60px;
+    background-color: orange;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    align-content: center;
+}
+
+#delete a{
+    font-family: 'Montserrat', sans-serif;
+    list-style: none;
+    font-size: 12px;
+    font-weight: bold;
+    text-decoration: none;
+    color: white;
+    align-items: center;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+input#delete {
+    background-image: url(../svg/smoke.svg);
+    background-repeat: no-repeat;
+    background-position: 50%;
+    background-color: white;
+    font-family: 'Montserrat', sans-serif;
+    cursor: pointer;
+    width: 10vw;
+    height: 8vh;
+    border: none;
+}
+
+input#delete:hover {
+    background-image: url(../svg/smokeG.svg);
+    background-repeat: no-repeat;
+    background-position: 50%;
+    background-color: white;
+    cursor: pointer;
+    width: 10vw;
+    height: 8vh;
+    border: none;
+}
+
+.betwenn{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+TERMINA AQUI ------*/

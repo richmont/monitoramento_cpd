@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    {% include 'estaticos_externos.html' %}
+    <title>Exibir workstations cadastradas</title>
+    {% load static %}
+    <script src="{% static 'workstations/js/workstations.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'workstations/css/workstations.css' %}">
+        
+     
+</head>
+
+<body class="" style="background-color: #e6ffe6;">
+  
+
+<body>
+    {% include 'navbar.html'%}
+    {% include 'mensagens.html' %}
+
+    <!-- Ativar modal para cadastrar workstation -->
+    <div class="d-flex justify-content-center mt-5">
+        <button type="button" class="btn btn-secondary w-25 bg-gradient rounded-buttom bg-dark" data-bs-toggle="modal" data-bs-target="#ModalCadastrarWorkstation">
+            <i class="material-icons">
+                add
+                </i>
+                <i class="material-icons">
+                    desktop_windows
+                    </i> 
+                    Cadastrar workstation
+        </button>
+    </div>
+
+{% if workstations %}
+    <div class="lista-workstations container">
+        <div class="row row-cols-4">
+
+            {% for workstation in workstations %}
+            <ul class="list-group gap-3 p-3">
+                {% if workstation.online == "online" %}
+                <div class="workstation ligada col">
+                    <li class="list-group-item rounded ">    
+                        <p class="workstation_online badge bg-primary">
+                            <i class="material-icons">desktop_windows  </i>
+                                {{ workstation.online }}</p>
+
+                                <!-- Ativar modal para Editar workstation -->
+                        <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#ModalEditarWorkstation{{workstation.id}}">
+                            <i class="material-icons">settings</i></button>
+
+                            <!-- Ativar modal para Excluir workstation -->
+                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#ModalExcluirWorkstation{{workstation.id}}">
+                            <i class="material-icons">close</i></button>
+                {% else %}
+                <div class="workstation desligada col">
+                    <li class="list-group-item rounded border-4  ">
+                        <p class="workstation_online badge bg-dark">
+                            <i class="material-icons">
+                                desktop_access_disabled
+                                </i> {{ workstation.online }}</p>
+
+                                 <!-- Ativar modal para Editar workstation -->
+                        <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#ModalEditarWorkstation{{workstation.id}}">
+                            <i class="material-icons">settings</i></button>
+
+                            <!-- Ativar modal para Excluir workstation -->
+                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#ModalExcluirWorkstation{{workstation.id}}">
+                            <i class="material-icons">close</i></button>
+                {% endif %}
+                <div class="dropdown col">
+                  </div>
+                        <p class="workstation_hostname"><i class="material-icons">home_work</i> {{ workstation.hostname }}</p>
+                        <p class="workstation_ip "><i class="material-icons">public</i>{{ workstation.IP }}</p>
+                        <p class="workstation_local"><i class="material-icons">group</i> {{ workstation.local }}</p>
+                        <p class="workstation_modelo"><i class="material-icons">devices</i> {{ workstation.modelo }}</p>
+                    </li>
+                    </div> <!-- Fecha a div de workstation -->
+                </ul>
+                    <!-- Modal para excluir workstation -->
+                    <div class="modal fade" id="ModalExcluirWorkstation{{workstation.id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="ModalExcluirWorkstation{{workstation.id}}Label" aria-hidden="true">
+                        <div class="modal-dialog">
+                        <div class="modal-content">
+                                <div class="modal-header">
+                                <h5 class="modal-title" id="ModalExcluirWorkstation{{workstation.id}}Label">Excluir workstation</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form id="form" action = "" method = "post" name="form">
+                                        <div id="form-excluir-workstation" class="form-excluir-workstation">
+                                            {% csrf_token %}
+                                                <p class="workstation_hostname">{{ workstation.hostname }}</p>
+                                                <p class="workstation_ip">{{ workstation.IP }}</p>
+                                                <p class="workstation_local">{{ workstation.local }}</p>
+                                                <p class="workstation_modelo">{{ workstation.modelo }}</p>
+                                                <input name="id_workstation" class="invisible" value="{{ workstation.id }}"></input>
+                                                <input name="operacao" class="invisible" value="excluir"></input>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-sucess" data-bs-dismiss="modal"><i class="material-icons">check</i>Cancelar</button>
+                                                <button type="submit" class="btn btn-danger"><i class="material-icons">close</i>Confirmar exclusão</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                  <!-- fim modal para excluir workstation -->
+
+                <!-- Modal para Editar workstation -->
+                <div class="modal fade" id="ModalEditarWorkstation{{workstation.id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="ModalEditarWorkstation{{workstation.id}}Label" aria-hidden="true">
+                    <div class="modal-dialog">
+                    <div class="modal-content">
+                            <div class="modal-header">
+                            <h5 class="modal-title" id="ModalEditarWorkstation{{workstation.id}}Label">Editar workstation</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="form" action = "" method = "post" name="form">
+                                    <div id="form-editar-workstation" class="form-editar-workstation">
+                                        {% csrf_token %}
+                                            <span class="form-label">Hostname</span>
+                                            <input name="hostname" value="{{ workstation.hostname }}" class="form-control workstation_hostname">
+                                            <span class="form-label">IP</span>
+                                            <input name="IP" value="{{ workstation.IP }}" class="form-control workstation_ip">
+                                            <span class="form-label">Local</span>
+                                            <input name="local" value="{{ workstation.local }}" class="form-control workstation_local">
+                                            <span class="form-label">Dominio</span>
+                                                <input name="dominio" value="{{ workstation.dominio }}" class="form-control workstation_dominio">
+                                            <span class="form-label">Modelo</span>
+                                            <select name="modelo" value="{{ workstation.modelo }}" class="form-control workstation_modelo">
+                                                {% for modelo in lista_modelos_workstation %}
+                                                <option value="{{ modelo }}">{{ modelo }}</option>
+                                                {% endfor %}
+                                            </select>
+                                            <input name="id_workstation" class="invisible" value="{{ workstation.id }}"></input>
+                                            <input name="operacao" class="invisible" value="editar"></input>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-sucess" data-bs-dismiss="modal"><i class="material-icons">close</i>Cancelar</button>
+                                            <button type="submit" class="btn btn-warning"><i class="material-icons">check</i>Confirmar edição</button>
+                                        </div>
+                                    </div>
+                                </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+<!-- fim modal para Editar workstation -->
+
+
+            {% endfor %}
+        </div> <!-- fecha a div row -->
+    </div> <!-- Fecha a div de lista-workstations -->
+{% else %}
+    <p class="display-5">Nenhuma workstation cadastrada no momento</p
+{% endif %}
+</div>
+
+    
+    <!-- Modal para criar workstation -->
+    <div class="modal fade" id="ModalCadastrarWorkstation" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="ModalCadastrarWorkstationLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="ModalCadastrarWorkstationLabel">Cadastrar nova workstation</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form id="form" action = "" method = "post" name="form">
+                <div id="form-cadastro-workstation" class="form-cadastro-workstation">
+                    {% csrf_token %}
+
+                    {{ form_ws.as_p }}
+
+                    <input name="operacao" class="invisible" value="criar"></input>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal"><i class="material-icons">close</i>Fechar</button>
+                        <button type="submit" class="btn btn-primary"><i class="material-icons">add</i>Cadastrar</button>
+                    </div>
+                </div>
+        </form>
+        </div>
+      </div>
+    </div>
+</div>
+<!-- fim modal para criar workstation -->    
+</body>
+</html>

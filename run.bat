@@ -1,0 +1,1 @@
+waitress-serve --listen=*:80 monitoramento_cpd_projeto.wsgi:application

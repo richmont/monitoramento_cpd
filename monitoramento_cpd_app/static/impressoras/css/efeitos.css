@@ -1,0 +1,38 @@
+.impressora_nome{
+       
+
+    }
+    impressora_ip {
+        
+    }
+    impressora_local{
+
+    }
+
+    impressora_modelo{
+
+    }
+
+    impressora_status{
+
+    }
+    impressora_bandeja1{
+
+    }
+    impressora_bandeja2{
+
+    }
+    impressora_alimentador{
+
+    }
+    impressora_bandeja_padrao{
+
+    }
+    .impressora_toner{
+        height: 15px;
+    background-color: #777;
+    position: relative;
+    }
+    impressora_kit_rolo
+    impressora_kit_manutencao
+    impressora_unidade_imagem

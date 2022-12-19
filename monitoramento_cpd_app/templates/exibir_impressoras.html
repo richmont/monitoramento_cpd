@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    {% include 'estaticos_externos.html' %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'impressoras/css/impressoras.css' %}">
+    <title>Exibir impressoras cadastradas</title>
+
+</head>
+<body>
+    {% include 'navbar.html'%}
+    {% include 'mensagens.html' %}
+    <!-- Ativar modal para cadastrar Impressora -->
+    <div class="d-flex justify-content-center mt-5">
+        <button type="button" class="btn btn-secondary w-25" data-bs-toggle="modal" data-bs-target="#ModalCadastrarImpressora">
+            <i class="material-icons">
+                add
+                </i>
+                <i class="material-icons">
+                    printer
+                    </i> 
+                    Cadastrar Impressora
+        </button>
+    </div>
+{% if impressoras %}
+    <div class="lista-impressoras container">
+
+        <div class="row row-cols-4 ">
+        {% for impressora in impressoras %}
+            <div class="col list-group">
+                <div class="impressora list-group-item p-1 mt-3">
+                     <!-- Ativar modal para Editar impressora -->
+                     <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#ModalEditarImpressora-{{impressora.id}}">
+                        <i class="material-icons">settings</i></button>
+
+                        <!-- Ativar modal para Excluir impressora -->
+                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#ModalExcluirImpressora-{{impressora.id}}">
+                        <i class="material-icons">close</i></button>
+                    {% if impressora.modelo == "Lexmark MS811" %}
+                        {% if impressora.online %}
+                        <!-- impressora online -->
+                            <p class="impressora_online">Online: {{ impressora.online }}</p>
+                            <p class="impressora_nome">Impressora: {{ impressora.nome }}</p>
+                            <p class="impressora_ip">IP: <a href='http://{{ impressora.IP }}'>{{ impressora.IP }}</a></p>
+                            <p class="impressora_local">Setor: {{ impressora.local }}</p>
+                            <p class="impressora_modelo">Modelo: {{ impressora.modelo }}</p>
+                            <p class="impressora_status">Status: {{ impressora.status }}</p>
+                            <p class="impressora_bandeja1">Bandeja 1: {{ impressora.bandeja1 }}</p>
+                            <p class="impressora_bandeja2">Bandeja 2: {{ impressora.bandeja2 }}</p>
+                            <p class="impressora_bandeja_padrao">Bandeja Padrão: {{ impressora.bandeja_padrao }}</p>
+                            <p class="impressora_toner">Toner: {{ impressora.toner }}%</p>
+                            <p class="impressora_kit_rolo">Kit do Rolo: {{ impressora.kit_rolo }}%</p>
+                            <p class="impressora_kit_manutencao">Kit de Manutenção: {{ impressora.kit_manutencao }}%</p>
+                            <p class="impressora_unidade_imagem">Unidade de Imagem: {{ impressora.unidade_imagem }}%</p>
+                        {% else %}
+                        <!-- impressora offline -->
+                            <p class="impressora_online">Online: {{ impressora.online }}</p>
+                            <p class="impressora_nome">Impressora: {{ impressora.nome }}</p>
+                            <p class="impressora_ip">IP: <a href='http://{{ impressora.IP }}'>{{ impressora.IP }}</a></p>
+                            <p class="impressora_local">Setor: {{ impressora.local }}</p>
+                            <p class="impressora_modelo">Modelo: {{ impressora.modelo }}</p>
+                            <p class="impressora_motivo">Motivo: {{ impressora.motivo }}</p>
+                        {% endif %}
+                    {% endif %}
+
+
+                    <!-- Modal para excluir impressora -->
+                    <div class="modal fade" id="ModalExcluirImpressora-{{impressora.id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="ModalExcluirImpressora{{impressora.id}}Label" aria-hidden="true">
+                        <div class="modal-dialog">
+                        <div class="modal-content">
+                                <div class="modal-header">
+                                <h5 class="modal-title" id="ModalExcluirImpressora{{impressora.id}}Label">Excluir impressora</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form id="form" action = "" method = "post" name="form">
+                                        <div id="form-excluir-impressora" class="form-excluir-impressora">
+                                            {% csrf_token %}
+                                                <p class="impressora_nome">{{ impressora.nome }}</p>
+                                                <p class="impressora_ip">{{ impressora.IP }}</p>
+                                                <p class="impressora_local">{{ impressora.local }}</p>
+                                                <p class="impressora_modelo">{{ impressora.modelo }}</p>
+                                                <input name="id_impressora" class="invisible" value="{{ impressora.id }}"></input>
+                                                <input name="operacao" class="invisible" value="excluir"></input>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-sucess" data-bs-dismiss="modal"><i class="material-icons">check</i>Cancelar</button>
+                                                <button type="submit" class="btn btn-danger"><i class="material-icons">close</i>Confirmar exclusão</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                  <!-- fim modal para excluir impressora -->
+
+                <!-- Modal para Editar impressora -->
+                <div class="modal fade" id="ModalEditarImpressora-{{impressora.id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="ModalEditarImpressora{{impressora.id}}Label" aria-hidden="true">
+                    <div class="modal-dialog">
+                    <div class="modal-content">
+                            <div class="modal-header">
+                            <h5 class="modal-title" id="ModalEditarImpressora{{impressora.id}}Label">Editar impressora</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="form" action = "" method = "post" name="form">
+                                    <div id="form-editar-impressora" class="form-editar-impressora">
+                                        {% csrf_token %}
+                                            <span class="form-label">Nome</span>
+                                            <input name="nome" value="{{ impressora.nome }}" class="form-control impressora_hostname">
+                                            <span class="form-label">IP</span>
+                                            <input name="IP" value="{{ impressora.IP }}" class="form-control impressora_ip">
+                                            <span class="form-label">Local</span>
+                                            <input name="local" value="{{ impressora.local }}" class="form-control impressora_local">
+                                            <span class="form-label">Modelo</span>
+                                            <select name="modelo" class="form-control impressora_modelo">
+                                                {% for modelo in lista_modelos_impressora %}
+                                                    {% if modelo == impressora.modelo %}
+                                                        <option value="{{ modelo }}" selected>{{ modelo }}</option>
+                                                    {% else %}
+                                                        <option value="{{ modelo }}">{{ modelo }}</option>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </select>
+                                            <input name="id_impressora" class="invisible" value="{{ impressora.id }}"></input>
+                                            <input name="operacao" class="invisible" value="editar"></input>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-sucess" data-bs-dismiss="modal"><i class="material-icons">close</i>Cancelar</button>
+                                            <button type="submit" class="btn btn-warning"><i class="material-icons">check</i>Confirmar edição</button>
+                                        </div>
+                                    </div>
+                                </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+<!-- fim modal para Editar impressora -->
+
+                </div> <!-- fecha div list-group-item -->
+            </div> <!-- fecha div col/list-group -->
+    {% endfor %}
+        </div> <!-- fecha o div row -->
+    </div> <!-- Fecha o div container -->
+    {% else %}
+    <p class="display-5 text-center mt-5">Nenhuma impressora cadastrada no momento</p
+    {% endif %}
+
+
+    <!-- Modal para criar impressora -->
+    
+    <div class="modal fade" id="ModalCadastrarImpressora" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="ModalCadastrarImpressoraLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="ModalCadastrarImpressoraLabel">Cadastrar nova impressora</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form id="form" action = "" method = "post" name="form">
+                <div id="form-cadastro-impressora" class="form-cadastro-impressora">
+                    {% csrf_token %}
+                    
+                    {{ form_imp.as_p }}
+
+                    <input name="operacao" class="invisible" value="criar"></input>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal"><i class="material-icons">close</i>Fechar</button>
+                        <button type="submit" class="btn btn-primary"><i class="material-icons">add</i>Cadastrar</button>
+                    </div>
+                </div>
+        </form>
+        </div>
+      </div>
+    </div>
+</div>
+<!-- fim modal para criar impressora -->  
+</body>
+</html>
