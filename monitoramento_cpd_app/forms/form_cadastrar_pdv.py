@@ -8,7 +8,9 @@ class FormPDV(forms.ModelForm):
         self.fields['IP'].widget.attrs.update({'class': 'form-control'})
         self.fields['checkout'].widget.attrs.update({'class': 'form-control'})
         self.fields['tipo_pdv'].widget.attrs.update({'class': 'form-control'})
+        self.fields['num_serial_pinpad'].widget.attrs.update({'class': 'form-control'})
+        self.fields['conexao_pinpad'].widget.attrs.update({'class': 'form-control'})
 
     class Meta:
         model = PDV
-        fields = ["IP", "checkout", "tipo_pdv"]
+        fields = ["IP", "checkout", "tipo_pdv", "num_serial_pinpad", "conexao_pinpad"]

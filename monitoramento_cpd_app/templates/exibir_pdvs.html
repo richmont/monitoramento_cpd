@@ -1,0 +1,190 @@
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    {% include 'estaticos_externos.html' %}
+    <title>Exibir PDVs cadastradas</title>
+    {% load static %}
+    <script src="{% static 'PDVs/js/PDVs.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'PDVs/css/PDVs.css' %}">
+        
+     
+</head>
+
+<body class="" style="background-color: #e6ffe6;">
+  
+
+<body>
+    {% include 'navbar.html'%}
+    {% include 'mensagens.html' %}
+
+    
+    <!-- Ativar modal para cadastrar PDV -->
+    <div class="d-flex justify-content-center mt-5">
+        <button type="button" class="btn btn-secondary w-25 bg-gradient rounded-buttom bg-dark" data-bs-toggle="modal" data-bs-target="#ModalCadastrarPDV">
+            <i class="material-icons">
+                add
+                </i>
+                <i class="material-icons">
+                    desktop_windows
+                    </i> 
+                    Cadastrar PDV
+        </button>
+    </div>
+
+    
+{% if PDVs %}
+<div class="lista-PDVs container">
+    <div class="row row-cols-4">
+
+        {% for PDV in PDVs %}
+        <ul class="list-group gap-3 p-3">
+            {% if PDV.online == "online" %}
+            <div class="PDV ligada col">
+                <li class="list-group-item rounded ">    
+                    <p class="PDV_online badge bg-primary">
+                        <i class="material-icons">desktop_windows  </i>
+                            {{ PDV.online }}</p>
+
+                            <!-- Ativar modal para Editar PDV -->
+                    <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#ModalEditarPDV{{PDV.id}}">
+                        <i class="material-icons">settings</i></button>
+
+                        <!-- Ativar modal para Excluir PDV -->
+                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#ModalExcluirPDV{{PDV.id}}">
+                        <i class="material-icons">close</i></button>
+            {% else %}
+            <div class="PDV desligada col">
+                <li class="list-group-item rounded border-4  ">
+                    <p class="PDV_online badge bg-dark">
+                        <i class="material-icons">
+                            desktop_access_disabled
+                            </i> {{ PDV.online }}</p>
+
+                             <!-- Ativar modal para Editar PDV -->
+                    <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#ModalEditarPDV{{PDV.id}}">
+                        <i class="material-icons">settings</i></button>
+
+                        <!-- Ativar modal para Excluir PDV -->
+                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#ModalExcluirPDV{{PDV.id}}">
+                        <i class="material-icons">close</i></button>
+            {% endif %}
+            <div class="dropdown col">
+              </div>
+                    <p class="PDV_checkout"><i class="material-icons">home_work</i> {{ PDV.checkout }}</p>
+                    <p class="PDV_ip "><i class="material-icons">public</i>{{ PDV.IP }}</p>
+                    <p class="PDV_conexao_pinpad"><i class="material-icons">group</i> {{ PDV.conexao_pinpad }}</p>
+                    <p class="PDV_num_serial_pinpad"><i class="material-icons">group</i> {{ PDV.num_serial_pinpad }}</p>
+                    <p class="PDV_tipo_pdv"><i class="material-icons">devices</i> {{ PDV.tipo_pdv }}</p>
+                </li>
+                </div> <!-- Fecha a div de PDV -->
+            </ul>
+                <!-- Modal para excluir PDV -->
+                <div class="modal fade" id="ModalExcluirPDV{{PDV.id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="ModalExcluirPDV{{PDV.id}}Label" aria-hidden="true">
+                    <div class="modal-dialog">
+                    <div class="modal-content">
+                            <div class="modal-header">
+                            <h5 class="modal-title" id="ModalExcluirPDV{{PDV.id}}Label">Excluir PDV</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="form" action = "" method = "post" name="form">
+                                    <div id="form-excluir-PDV" class="form-excluir-PDV">
+                                        {% csrf_token %}
+                                            <p class="PDV_checkout">{{ PDV.checkout }}</p>
+                                            <p class="PDV_ip">{{ PDV.IP }}</p>
+                                            <p class="PDV_conexao_pinpad">{{ PDV.conexao_pinpad }}</p>
+                                            <p class="PDV_num_serial_pinpad">{{ PDV.num_serial_pinpad }}</p>
+                                            <p class="PDV_tipo_pdv">{{ PDV.tipo_pdv }}</p>
+                                            <input name="id_PDV" class="invisible" value="{{ PDV.id }}"></input>
+                                            <input name="operacao" class="invisible" value="excluir"></input>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-sucess" data-bs-dismiss="modal"><i class="material-icons">check</i>Cancelar</button>
+                                            <button type="submit" class="btn btn-danger"><i class="material-icons">close</i>Confirmar exclusão</button>
+                                        </div>
+                                    </div>
+                                </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+              <!-- fim modal para excluir PDV -->
+
+            <!-- Modal para Editar PDV -->
+            <div class="modal fade" id="ModalEditarPDV{{PDV.id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="ModalEditarPDV{{PDV.id}}Label" aria-hidden="true">
+                <div class="modal-dialog">
+                <div class="modal-content">
+                        <div class="modal-header">
+                        <h5 class="modal-title" id="ModalEditarPDV{{PDV.id}}Label">Editar PDV</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="form" action = "" method = "post" name="form">
+                                <div id="form-editar-PDV" class="form-editar-PDV">
+                                    {% csrf_token %}
+                                        <span class="form-label">checkout</span>
+                                        <input name="checkout" value="{{ PDV.checkout }}" class="form-control PDV_checkout">
+                                        <span class="form-label">IP</span>
+                                        <input name="IP" value="{{ PDV.IP }}" class="form-control PDV_ip">
+                                        <span class="form-label">conexao_pinpad</span>
+                                        <input name="conexao_pinpad" value="{{ PDV.conexao_pinpad }}" class="form-control PDV_conexao_pinpad">
+                                        <span class="form-label">num_serial_pinpad</span>
+                                        <input name="num_serial_pinpad" value="{{ PDV.num_serial_pinpad }}" class="form-control PDV_num_serial_pinpad">
+                                        <span class="form-label">tipo_pdv</span>
+                                        <select name="tipo_pdv" value="{{ PDV.tipo_pdv }}" class="form-control PDV_tipo_pdv">
+                                            {% for tipo_pdv in lista_tipo_pdvs_PDV %}
+                                            <option value="{{ tipo_pdv }}">{{ tipo_pdv }}</option>
+                                            {% endfor %}
+                                        </select>
+                                        <input name="id_PDV" class="invisible" value="{{ PDV.id }}"></input>
+                                        <input name="operacao" class="invisible" value="editar"></input>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-sucess" data-bs-dismiss="modal"><i class="material-icons">close</i>Cancelar</button>
+                                        <button type="submit" class="btn btn-warning"><i class="material-icons">check</i>Confirmar edição</button>
+                                    </div>
+                                </div>
+                            </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+<!-- fim modal para Editar PDV -->
+
+
+        {% endfor %}
+    </div> <!-- fecha a div row -->
+</div> <!-- Fecha a div de lista-PDVs -->
+{% else %}
+<p class="display-5 text-center mt-5">Nenhum PDV cadastrado no momento</p
+{% endif %}
+</div>
+
+
+        <!-- Modal para criar PDV -->
+        <div class="modal fade" id="ModalCadastrarPDV" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="ModalCadastrarPDVLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="ModalCadastrarPDVLabel">Cadastrar nova PDV</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <form id="form" action = "" method = "post" name="form">
+                      <div id="form-cadastro-PDV" class="form-cadastro-PDV">
+                          {% csrf_token %}
+      
+                          {{ form_pdv.as_p }}
+      
+                          <input name="operacao" class="invisible" value="criar"></input>
+                          <div class="modal-footer">
+                              <button type="button" class="btn btn-danger" data-bs-dismiss="modal"><i class="material-icons">close</i>Fechar</button>
+                              <button type="submit" class="btn btn-primary"><i class="material-icons">add</i>Cadastrar</button>
+                          </div>
+                      </div>
+              </form>
+              </div>
+            </div>
+          </div>
+      </div>
+      <!-- fim modal para criar PDV -->  
+</body>
+</html>
