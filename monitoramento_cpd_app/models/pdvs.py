@@ -17,6 +17,9 @@ class PDV(models.Model):
     # exemplo: 12A, 5B
     checkout = models.CharField(unique=True, max_length=255, blank=False)
     IP = models.CharField(unique=True, max_length=255, blank=False)
+    login_pdv = models.CharField(max_length=255, blank=False)
+    pwd_pdv = models.CharField(max_length=255, blank=False)
+    porta_ssh_pdv = models.IntegerField(blank=False)
     tipo_pdv = models.CharField(
             max_length=255,
             choices=TIPOS_PDV,
