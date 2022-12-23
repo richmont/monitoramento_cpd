@@ -213,11 +213,11 @@
                                             <input name="num_serial_pinpad" value="{{ PDV.num_serial_pinpad }}" class="form-control PDV_num_serial_pinpad">
                                             <span class="form-label">tipo_pdv</span>
                                             <select name="tipo_pdv" value="{{ PDV.tipo_pdv }}" class="form-control PDV_tipo_pdv">
-                                                {% for tipo_pdv in lista_tipo_pdvs_PDV %}
+                                                {% for tipo_pdv in lista_tipos_pdv %}
                                                 <option value="{{ tipo_pdv }}">{{ tipo_pdv }}</option>
                                                 {% endfor %}
                                             </select>
-                                            <input name="id_PDV" class="invisible" value="{{ PDV.id }}"></input>
+                                            <input name="id_PDV" class="invisible" value="{{ PDV.id_pdv }}"></input>
                                             <input name="operacao" class="invisible" value="editar"></input>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-sucess" data-bs-dismiss="modal"><i class="material-icons">close</i>Cancelar</button>
