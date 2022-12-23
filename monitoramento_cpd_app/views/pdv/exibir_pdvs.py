@@ -159,13 +159,22 @@ def pdvs(request):
             lista_destinos.append(dados_pdv)
             dados_pdv = None
         
-        dados_gateway = {
-            "ip": request.session["hostname_gateway"],
-            "port": request.session["porta_ssh_gateway"],
-            "login": request.session["usuario_ssh_gateway"],
-            "pwd":request.session["senha_ssh_gateway"]
-        }
-        
+        try:
+            dados_gateway = {
+                "ip": request.session["hostname_gateway"],
+                "port": request.session["porta_ssh_gateway"],
+                "login": request.session["usuario_ssh_gateway"],
+                "pwd":request.session["senha_ssh_gateway"]
+            }
+        except KeyError:
+            return render(request,
+            'exibir_pdvs.html',
+            {
+                "form_pdv": form_pdv,
+                "lista_tipos_pdv": lista_tipos_pdv,
+                "form_login_gateway": form_login_gateway
+                }
+            )
         
         # posso logo mandar o comando pra coletar o número do pinpad né
         t_n = t_Nested_SSH(lista_destinos, gateway=dados_gateway, comando="hostname")

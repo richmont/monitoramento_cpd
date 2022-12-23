@@ -61,7 +61,10 @@
 <!-- Modal para criar PDV -->
 {% if not request.session.hostname_gateway %}
 <p>Sessão não detectada</p>
-
+<script>
+    var e_ModalLoginGateway = new bootstrap.Modal(document.getElementById('ModalLoginGateway'))
+    e_ModalLoginGateway.show() 
+</script>
 {% else %}
     <!-- Ativar modal para cadastrar PDV -->
     <div class="d-flex justify-content-center mt-5">
