@@ -122,11 +122,11 @@
                                 {{ PDV.online }}</p>
 
                                 <!-- Ativar modal para Editar PDV -->
-                        <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#ModalEditarPDV{{PDV.id}}">
+                        <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#ModalEditarPDV{{PDV.id_pdv}}">
                             <i class="material-icons">settings</i></button>
 
                             <!-- Ativar modal para Excluir PDV -->
-                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#ModalExcluirPDV{{PDV.id}}">
+                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#ModalExcluirPDV{{PDV.id_pdv}}">
                             <i class="material-icons">close</i></button>
                 {% else %}
                 <div class="PDV desligada col">
@@ -137,11 +137,11 @@
                                 </i> {{ PDV.online }}</p>
 
                                 <!-- Ativar modal para Editar PDV -->
-                        <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#ModalEditarPDV{{PDV.id}}">
+                        <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#ModalEditarPDV{{PDV.id_pdv}}">
                             <i class="material-icons">settings</i></button>
 
                             <!-- Ativar modal para Excluir PDV -->
-                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#ModalExcluirPDV{{PDV.id}}">
+                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#ModalExcluirPDV{{PDV.id_pdv}}">
                             <i class="material-icons">close</i></button>
                 {% endif %}
                 <div class="dropdown col">
@@ -155,11 +155,11 @@
                     </div> <!-- Fecha a div de PDV -->
                 </ul>
                     <!-- Modal para excluir PDV -->
-                    <div class="modal fade" id="ModalExcluirPDV{{PDV.id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="ModalExcluirPDV{{PDV.id}}Label" aria-hidden="true">
+                    <div class="modal fade" id="ModalExcluirPDV{{PDV.id_pdv}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="ModalExcluirPDV{{PDV.id_pdv}}Label" aria-hidden="true">
                         <div class="modal-dialog">
                         <div class="modal-content">
                                 <div class="modal-header">
-                                <h5 class="modal-title" id="ModalExcluirPDV{{PDV.id}}Label">Excluir PDV</h5>
+                                <h5 class="modal-title" id="ModalExcluirPDV{{PDV.id_pdv}}Label">Excluir PDV</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
@@ -171,7 +171,7 @@
                                                 <p class="PDV_conexao_pinpad">{{ PDV.conexao_pinpad }}</p>
                                                 <p class="PDV_num_serial_pinpad">{{ PDV.num_serial_pinpad }}</p>
                                                 <p class="PDV_tipo_pdv">{{ PDV.tipo_pdv }}</p>
-                                                <input name="id_PDV" class="invisible" value="{{ PDV.id }}"></input>
+                                                <input name="id_PDV" class="invisible" value="{{ PDV.id_pdv }}"></input>
                                                 <input name="operacao" class="invisible" value="excluir"></input>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-sucess" data-bs-dismiss="modal"><i class="material-icons">check</i>Cancelar</button>
@@ -186,11 +186,11 @@
                 <!-- fim modal para excluir PDV -->
 
                 <!-- Modal para Editar PDV -->
-                <div class="modal fade" id="ModalEditarPDV{{PDV.id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="ModalEditarPDV{{PDV.id}}Label" aria-hidden="true">
+                <div class="modal fade" id="ModalEditarPDV{{PDV.id_pdv}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="ModalEditarPDV{{PDV.id_pdv}}Label" aria-hidden="true">
                     <div class="modal-dialog">
                     <div class="modal-content">
                             <div class="modal-header">
-                            <h5 class="modal-title" id="ModalEditarPDV{{PDV.id}}Label">Editar PDV</h5>
+                            <h5 class="modal-title" id="ModalEditarPDV{{PDV.id_pdv}}Label">Editar PDV</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
@@ -217,7 +217,7 @@
                                                 <option value="{{ tipo_pdv }}">{{ tipo_pdv }}</option>
                                                 {% endfor %}
                                             </select>
-                                            <input name="id_PDV" class="invisible" value="{{ PDV.id_pdv }}"></input>
+                                            <input name="id_PDV" class="invisible" value="{{ PDV.id_pdv_pdv }}"></input>
                                             <input name="operacao" class="invisible" value="editar"></input>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-sucess" data-bs-dismiss="modal"><i class="material-icons">close</i>Cancelar</button>

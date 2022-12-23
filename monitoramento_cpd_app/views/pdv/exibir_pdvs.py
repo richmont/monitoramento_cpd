@@ -41,6 +41,9 @@ def pdvs(request):
                 messages.add_message(request, messages.ERROR, f"Campo: {x[0]} Erro: {x[1][0]}")
 
     def excluir_pdv():
+#        if request.POST["id_PDV"] is None or len(request.POST["id_PDV"]):
+#            messages.add_message(request, messages.ERROR, f"ID do PDV inválido: ", request.POST["id_PDV"])
+#        else:
         id_PDV_excluir = request.POST["id_PDV"]
         try:
             PDV.objects.filter(
@@ -61,7 +64,6 @@ def pdvs(request):
         login_pdv = str(request.POST["login_pdv"])
         pwd_pdv = str(request.POST["pwd_pdv"])
         porta_ssh_pdv = str(request.POST["porta_ssh_pdv"])
-        num_serial_pinpad = str(request.POST["num_serial_pinpad"])
         conexao_pinpad = str(request.POST["conexao_pinpad"])
         instancia_pdv_editar = PDV.objects.filter(
             id=id_PDV_editar)
@@ -73,7 +75,6 @@ def pdvs(request):
                 login_pdv=login_pdv,
                 pwd_pdv=pwd_pdv,
                 porta_ssh_pdv=porta_ssh_pdv,
-                num_serial_pinpad=num_serial_pinpad,
                 conexao_pinpad=conexao_pinpad)
             messages.add_message(request, messages.INFO,
                                     f"PDV {checkout}, editado com sucesso")
@@ -180,8 +181,9 @@ def pdvs(request):
         print(t_n.respostas)
         for resposta in t_n.respostas:
             if resposta["conectou"]:
-                serial = resposta["resposta"].split("\n")
-                # busca no banco o pdv com este IP
+                # quebra a resposta usando o \n para quando há múltiplos seriais no diretório
+                serial = resposta["resposta"].split("\n")[0]
+                
                 pdv_on = PDV.objects.filter(IP=resposta["maquina"]).values()[0]
                 p = {
                     "checkout": pdv_on["checkout"],
@@ -190,7 +192,7 @@ def pdvs(request):
                     "pwd_pdv": pdv_on["pwd_pdv"],
                     "porta_ssh_pdv": pdv_on["porta_ssh_pdv"],
                     "conexao_pinpad": pdv_on["conexao_pinpad"],
-                    "num_serial_pinpad": serial[0],
+                    "num_serial_pinpad": serial,
                     "tipo_pdv": pdv_on["tipo_pdv"],
                     "id_pdv": pdv_on["id"],
                     "online": "online"
@@ -206,7 +208,6 @@ def pdvs(request):
                     "pwd_pdv": pdv_off["pwd_pdv"],
                     "porta_ssh_pdv": pdv_off["porta_ssh_pdv"],
                     "conexao_pinpad": pdv_off["conexao_pinpad"],
-                    "num_serial_pinpad": pdv_off["num_serial_pinpad"],
                     "tipo_pdv": pdv_off["tipo_pdv"],
                     "id_pdv": pdv_off["id"],
                     "online": "offline"

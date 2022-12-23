@@ -11,9 +11,9 @@ class FormPDV(forms.ModelForm):
         self.fields['login_pdv'].widget.attrs.update({'class': 'form-control'})
         self.fields['pwd_pdv'].widget.attrs.update({'class': 'form-control'})
         self.fields['porta_ssh_pdv'].widget.attrs.update({'class': 'form-control'})
-        self.fields['num_serial_pinpad'].widget.attrs.update({'class': 'form-control'})
+        
         self.fields['conexao_pinpad'].widget.attrs.update({'class': 'form-control'})
 
     class Meta:
         model = PDV
-        fields = ["IP", "checkout", "tipo_pdv", "login_pdv", "pwd_pdv", "porta_ssh_pdv", "num_serial_pinpad", "conexao_pinpad"]
+        fields = ["IP", "checkout", "tipo_pdv", "login_pdv", "pwd_pdv", "porta_ssh_pdv", "conexao_pinpad"]
