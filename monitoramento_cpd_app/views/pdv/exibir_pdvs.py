@@ -4,14 +4,12 @@ from django.contrib import messages
 from monitoramento_cpd_app.models.pdvs import PDV, lista_tipos_pdv
 from monitoramento_cpd_app.forms.form_cadastrar_pdv import FormPDV
 from monitoramento_cpd_app.forms.form_login_ssh_gateway import FormLoginGateway
-from monitoramento_cpd.ping_threads.Ping_threads import Ping_threads
-from monitoramento_cpd.nested_ssh.src.Nested_SSH import Nested_SSH
 from monitoramento_cpd.nested_ssh.src.t_Nested_SSH import t_Nested_SSH
+from conf.configuracoes import COMANDO_COLETAR_SERIAL_PINPAD
 import paramiko
-import bcrypt
 import socket
 import logging
-logger = logging.getLogger("View exibir PDVs")
+logger = logging.getLogger("")
 logging.basicConfig(level=logging.INFO)
 
 def pdvs(request):
@@ -56,7 +54,6 @@ def pdvs(request):
                 messages.add_message(request, messages.ERROR, f"Campo: {x[0]} Erro: {x[1][0]}")
 
     def editar_pdv():
-
         id_PDV_editar = request.POST["id_PDV"]
         checkout = request.POST["checkout"]
         ip = request.POST["IP"]
@@ -150,10 +147,10 @@ def pdvs(request):
             logger.debug("Criando dicionário com valores dos pdvs")
             
             dados_pdv = {
-                "ip": pdv.IP,
-                "port": pdv.porta_ssh_pdv,
-                "login": pdv.login_pdv,
-                "pwd": pdv.pwd_pdv
+                "ip": str(pdv.IP),
+                "port": int(pdv.porta_ssh_pdv),
+                "login": str(pdv.login_pdv),
+                "pwd": str(pdv.pwd_pdv)
             }
             
             lista_destinos.append(dados_pdv)
@@ -177,12 +174,13 @@ def pdvs(request):
             )
         
         # posso logo mandar o comando pra coletar o número do pinpad né
-        t_n = t_Nested_SSH(lista_destinos, gateway=dados_gateway, comando="hostname")
+        t_n = t_Nested_SSH(lista_destinos, gateway=dados_gateway, comando=str(COMANDO_COLETAR_SERIAL_PINPAD))
         # para cada resposta dos comandos, constrói a lista dos PDVs
         lista_pdvs = list()
         print(t_n.respostas)
         for resposta in t_n.respostas:
             if resposta["conectou"]:
+                serial = resposta["resposta"].split("\n")
                 # busca no banco o pdv com este IP
                 pdv_on = PDV.objects.filter(IP=resposta["maquina"]).values()[0]
                 p = {
@@ -192,7 +190,7 @@ def pdvs(request):
                     "pwd_pdv": pdv_on["pwd_pdv"],
                     "porta_ssh_pdv": pdv_on["porta_ssh_pdv"],
                     "conexao_pinpad": pdv_on["conexao_pinpad"],
-                    "num_serial_pinpad": pdv_on["num_serial_pinpad"],
+                    "num_serial_pinpad": serial[0],
                     "tipo_pdv": pdv_on["tipo_pdv"],
                     "id_pdv": pdv_on["id"],
                     "online": "online"
