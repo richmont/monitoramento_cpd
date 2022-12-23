@@ -20,7 +20,6 @@ def pdvs(request):
         login_pdv = str(request.POST["login_pdv"])
         pwd_pdv = str(request.POST["pwd_pdv"])
         porta_ssh_pdv = str(request.POST["porta_ssh_pdv"])
-        num_serial_pinpad = str(request.POST["num_serial_pinpad"])
         conexao_pinpad = str(request.POST["conexao_pinpad"])
 
         pdv = PDV(checkout=checkout,
@@ -29,7 +28,6 @@ def pdvs(request):
             login_pdv=login_pdv,
             pwd_pdv=pwd_pdv,
             porta_ssh_pdv=porta_ssh_pdv,
-            num_serial_pinpad=num_serial_pinpad,
             conexao_pinpad=conexao_pinpad
         )
         try:
