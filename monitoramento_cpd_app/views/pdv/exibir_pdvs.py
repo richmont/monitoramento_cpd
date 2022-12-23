@@ -147,42 +147,66 @@ def pdvs(request):
         lista_pdvs_completa = PDV.objects.all()
         lista_destinos = list()
         for pdv in lista_pdvs_completa:
+            logger.debug("Criando dicionário com valores dos pdvs")
+            
             dados_pdv = {
                 "ip": pdv.IP,
                 "port": pdv.porta_ssh_pdv,
                 "login": pdv.login_pdv,
                 "pwd": pdv.pwd_pdv
             }
+            
             lista_destinos.append(dados_pdv)
             dados_pdv = None
+        
         dados_gateway = {
             "ip": request.session["hostname_gateway"],
             "port": request.session["porta_ssh_gateway"],
             "login": request.session["usuario_ssh_gateway"],
             "pwd":request.session["senha_ssh_gateway"]
         }
+        
+        
         # posso logo mandar o comando pra coletar o número do pinpad né
-        t_n = t_Nested_SSH(lista_destinos, gateway_dados=dados_gateway, comando="hostname")
+        t_n = t_Nested_SSH(lista_destinos, gateway=dados_gateway, comando="hostname")
         # para cada resposta dos comandos, constrói a lista dos PDVs
-        dict_pdvs = dict()
+        lista_pdvs = list()
+        print(t_n.respostas)
         for resposta in t_n.respostas:
             if resposta["conectou"]:
                 # busca no banco o pdv com este IP
-                pdv_on = PDV.objects.filter(IP=resposta["ip"]).values()[0]
+                pdv_on = PDV.objects.filter(IP=resposta["maquina"]).values()[0]
                 p = {
-                    "checkout": pdv_on.checkout,
-                    "IP": pdv_on.IP,
-                    "login_pdv": pdv_on.login_pdv,
-                    "pwd_pdv": pdv_on.pwd_pdv,
-                    "porta_ssh_pdv": pdv_on.porta_ssh_pdv,
-                    "conexao_pinpad": pdv_on.conexao_pinpad,
-                    "num_serial_pinpad": pdv_on.num_serial_pinpad,
-                    "tipo_pdv": pdv_on.tipo_pdv,
-                    "id_pdv": pdv_on.id
+                    "checkout": pdv_on["checkout"],
+                    "IP": pdv_on["IP"],
+                    "login_pdv": pdv_on["login_pdv"],
+                    "pwd_pdv": pdv_on["pwd_pdv"],
+                    "porta_ssh_pdv": pdv_on["porta_ssh_pdv"],
+                    "conexao_pinpad": pdv_on["conexao_pinpad"],
+                    "num_serial_pinpad": pdv_on["num_serial_pinpad"],
+                    "tipo_pdv": pdv_on["tipo_pdv"],
+                    "id_pdv": pdv_on["id"],
+                    "online": "online"
                 }
-                dict_pdvs.append(p)
+                lista_pdvs.append(p)
                 
-        return dict_pdvs
+            else:
+                pdv_off = PDV.objects.filter(IP=resposta["maquina"]).values()[0]
+                p = {
+                    "checkout": pdv_off["checkout"],
+                    "IP": pdv_off["IP"],
+                    "login_pdv": pdv_off["login_pdv"],
+                    "pwd_pdv": pdv_off["pwd_pdv"],
+                    "porta_ssh_pdv": pdv_off["porta_ssh_pdv"],
+                    "conexao_pinpad": pdv_off["conexao_pinpad"],
+                    "num_serial_pinpad": pdv_off["num_serial_pinpad"],
+                    "tipo_pdv": pdv_off["tipo_pdv"],
+                    "id_pdv": pdv_off["id"],
+                    "online": "offline"
+                }
+                lista_pdvs.append(p)
+        
+        return lista_pdvs
     
     if request.method == "POST":
         if request.POST["operacao"] == 'login_servidor_gateway':
@@ -194,24 +218,13 @@ def pdvs(request):
         if request.POST["operacao"] == 'editar':
             editar_pdv()
 
-    
-    try: 
-        dict_pdvs = exibir_pdvs()
-        return render(request,
-                'exibir_pdvs.html',
-                {
-                    "form_pdv": form_pdv,
-                    "lista_tipos_pdv": lista_tipos_pdv,
-                    "form_login_gateway": form_login_gateway,
-                    "PDVs": dict_pdvs
-                    }
-                )
-    except KeyError:
-        # se parametros de gateway não estiverem definidos, exibe apenas o form de login
-        return render(request,
-                'exibir_pdvs.html',
-                {
-                    "form_login_gateway": form_login_gateway
-                    }
-                )
-    
+    dict_pdvs = exibir_pdvs()
+    return render(request,
+            'exibir_pdvs.html',
+            {
+                "form_pdv": form_pdv,
+                "lista_tipos_pdv": lista_tipos_pdv,
+                "form_login_gateway": form_login_gateway,
+                "PDVs": dict_pdvs
+                }
+            )
