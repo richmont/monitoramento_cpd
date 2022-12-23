@@ -24,7 +24,7 @@ class PDV(models.Model):
             blank=False
             )
     # Número de série pode ser atualizado automaticamente com comando ssh
-    num_serial_pinpad = models.CharField(unique=True, max_length=255, blank=True)
+    num_serial_pinpad = models.CharField(max_length=255, blank=True)
     # tipo de conexão obrigatória
     conexao_pinpad = models.CharField(
             max_length=255,
