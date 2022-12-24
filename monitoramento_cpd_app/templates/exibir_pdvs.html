@@ -62,6 +62,7 @@
 {% if not request.session.hostname_gateway %}
 <p>Sessão não detectada</p>
 <script>
+    // Ativa modal automaticamente
     var e_ModalLoginGateway = new bootstrap.Modal(document.getElementById('ModalLoginGateway'))
     e_ModalLoginGateway.show() 
 </script>
@@ -128,6 +129,10 @@
                             <!-- Ativar modal para Excluir PDV -->
                         <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#ModalExcluirPDV{{PDV.id_pdv}}">
                             <i class="material-icons">close</i></button>
+
+                        <!-- Ativar modal para Reiniciar PDV -->
+                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#ModalReiniciarPDV{{PDV.id_pdv}}">
+                            <i class="material-icons">restart_alt</i></button>
                 {% else %}
                 <div class="PDV desligada col">
                     <li class="list-group-item rounded border-4  ">
@@ -154,6 +159,41 @@
                     </li>
                     </div> <!-- Fecha a div de PDV -->
                 </ul>
+
+                <!-- Modal para reiniciar PDV -->
+                <div class="modal fade" id="ModalReiniciarPDV{{PDV.id_pdv}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="ModalReiniciarPDV{{PDV.id_pdv}}Label" aria-hidden="true">
+                    <div class="modal-dialog">
+                    <div class="modal-content">
+                            <div class="modal-header">
+                            <h5 class="modal-title" id="ModalReiniciarPDV{{PDV.id_pdv}}Label">Reiniciar PDV</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="form" action = "" method = "post" name="form">
+                                    <div id="form-Reiniciar-PDV" class="form-Reiniciar-PDV">
+                                        {% csrf_token %}
+                                            <p class="PDV_checkout">{{ PDV.checkout }}</p>
+                                            <p class="PDV_ip">{{ PDV.IP }}</p>
+                                            <p class="PDV_tipo_pdv">{{ PDV.tipo_pdv }}</p>
+                                            <input name="id_PDV" class="invisible" value="{{ PDV.id_pdv }}"></input>
+                                            <input name="operacao" class="invisible" value="reiniciar"></input>
+                                            <p>Confirme o login e senha do PDV para continuar</p>
+                                            <label for="login_pdv">Usuário</label>
+                                            <input id="login_pdv" name="login_pdv" class="form-control"></input>
+                                            <label for="senha_pdv">Senha</label>
+                                            <input type="password" name="senha_pdv" class="form-control"></input>
+
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-sucess" data-bs-dismiss="modal"><i class="material-icons">check</i>Cancelar</button>
+                                            <button type="submit" class="btn btn-danger"><i class="material-icons">close</i>Confirmar reinício</button>
+                                        </div>
+                                    </div>
+                                </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- fim modal para excluir PDV -->
                     <!-- Modal para excluir PDV -->
                     <div class="modal fade" id="ModalExcluirPDV{{PDV.id_pdv}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="ModalExcluirPDV{{PDV.id_pdv}}Label" aria-hidden="true">
                         <div class="modal-dialog">
@@ -169,7 +209,7 @@
                                                 <p class="PDV_checkout">{{ PDV.checkout }}</p>
                                                 <p class="PDV_ip">{{ PDV.IP }}</p>
                                                 <p class="PDV_conexao_pinpad">{{ PDV.conexao_pinpad }}</p>
-                                                <p class="PDV_num_serial_pinpad">{{ PDV.num_serial_pinpad }}</p>
+                                                
                                                 <p class="PDV_tipo_pdv">{{ PDV.tipo_pdv }}</p>
                                                 <input name="id_PDV" class="invisible" value="{{ PDV.id_pdv }}"></input>
                                                 <input name="operacao" class="invisible" value="excluir"></input>
@@ -209,8 +249,7 @@
                                             <input name="porta_ssh_pdv" value="{{ PDV.porta_ssh_pdv }}" class="form-control PDV_porta_ssh_pdv">
                                             <span class="form-label">conexao_pinpad</span>
                                             <input name="conexao_pinpad" value="{{ PDV.conexao_pinpad }}" class="form-control PDV_conexao_pinpad">
-                                            <span class="form-label">num_serial_pinpad</span>
-                                            <input name="num_serial_pinpad" value="{{ PDV.num_serial_pinpad }}" class="form-control PDV_num_serial_pinpad">
+                                            
                                             <span class="form-label">tipo_pdv</span>
                                             <select name="tipo_pdv" value="{{ PDV.tipo_pdv }}" class="form-control PDV_tipo_pdv">
                                                 {% for tipo_pdv in lista_tipos_pdv %}

@@ -4,8 +4,8 @@ from django.contrib import messages
 from monitoramento_cpd_app.models.pdvs import PDV, lista_tipos_pdv
 from monitoramento_cpd_app.forms.form_cadastrar_pdv import FormPDV
 from monitoramento_cpd_app.forms.form_login_ssh_gateway import FormLoginGateway
-from monitoramento_cpd.nested_ssh.src.t_Nested_SSH import t_Nested_SSH
-from conf.configuracoes import COMANDO_COLETAR_SERIAL_PINPAD
+from monitoramento_cpd.nested_ssh.src.t_Nested_SSH import t_Nested_SSH, Nested_SSH
+from conf.configuracoes import COMANDO_COLETAR_SERIAL_PINPAD, COMANDO_INICIAR_PDV, COMANDO_PARAR_PDV
 import paramiko
 import socket
 import logging
@@ -133,6 +133,55 @@ def pdvs(request):
             logger.info("login_gateway: Falhou, servidor, login ou senha não reconhecidos")
             messages.add_message(request, messages.ERROR, f"Login falhou, verifique servidor, usuário ou senha")
     
+    def reiniciar_pdv():
+        id_PDV_reiniciar = int(request.POST["id_PDV"])
+        login_pdv = str(request.POST["login_pdv"])
+        pwd_pdv = str(request.POST["senha_pdv"])
+        try:
+            pdv_reiniciar = PDV.objects.filter(id=id_PDV_reiniciar).values()[0]
+        except IndexError:
+            logger.error("PDV não encontrado, ID inválido")
+            messages.add_message(request, messages.INFO,
+                                    f"PDV de id {id_PDV_reiniciar}, não encontrado, tente novamente")
+        dados_pdv = {
+                "ip": str(pdv_reiniciar["IP"]),
+                "port": int(pdv_reiniciar["porta_ssh_pdv"]),
+                "login": str(login_pdv),
+                "pwd": str(pwd_pdv)
+            }
+        try:
+            dados_gateway = {
+                "ip": request.session["hostname_gateway"],
+                "port": int(request.session["porta_ssh_gateway"]),
+                "login": request.session["usuario_ssh_gateway"],
+                "pwd":request.session["senha_ssh_gateway"]
+            }
+            g_reiniciar = Nested_SSH(gateway_dados=dados_gateway)
+            r_parar_pdv = g_reiniciar.executar(
+                destino_dados=dados_pdv, 
+                comando=COMANDO_PARAR_PDV)
+            r_iniciar_pdv = g_reiniciar.executar(
+                destino_dados=dados_pdv, 
+                comando=COMANDO_INICIAR_PDV)
+        except Nested_SSH.erros.FalhaConexao:
+            messages.add_message(request, messages.INFO,
+                                    f"PDV {pdv_reiniciar['checkout']}, falhou a conexão, verifique endereço")
+        except Nested_SSH.erros.FalhaAutenticacao:
+            messages.add_message(request, messages.INFO,
+                                    f"Reinício do PDV {pdv_reiniciar['checkout']}, falhou por login ou senha incorretos")
+        except Nested_SSH.erros.EnderecoIncorreto:
+            messages.add_message(request, messages.INFO,
+                                    f"Reinício do PDV {pdv_reiniciar['checkout']}, por endereço incorreto")
+        except KeyError:
+            return render(request,
+            'exibir_pdvs.html',
+            {
+                "form_pdv": form_pdv,
+                "lista_tipos_pdv": lista_tipos_pdv,
+                "form_login_gateway": form_login_gateway
+                }
+            )
+        
     
     # formulário de cadastro do pdv
     form_pdv = FormPDV()
@@ -223,6 +272,8 @@ def pdvs(request):
             excluir_pdv()
         if request.POST["operacao"] == 'editar':
             editar_pdv()
+        if request.POST["operacao"] == 'reiniciar':
+            reiniciar_pdv()
 
     dict_pdvs = exibir_pdvs()
     return render(request,
