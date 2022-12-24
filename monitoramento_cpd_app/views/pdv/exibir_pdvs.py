@@ -4,7 +4,7 @@ from django.contrib import messages
 from monitoramento_cpd_app.models.pdvs import PDV, lista_tipos_pdv
 from monitoramento_cpd_app.forms.form_cadastrar_pdv import FormPDV
 from monitoramento_cpd_app.forms.form_login_ssh_gateway import FormLoginGateway
-from  nested_ssh.src.t_Nested_SSH import t_Nested_SSH, Nested_SSH
+from nested_ssh.src.t_Nested_SSH import t_Nested_SSH, Nested_SSH
 from conf.configuracoes import COMANDO_COLETAR_SERIAL_PINPAD, COMANDO_INICIAR_PDV, COMANDO_PARAR_PDV
 import paramiko
 import socket

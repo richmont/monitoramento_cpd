@@ -1,6 +1,6 @@
 from bs4 import BeautifulSoup
 import logging
-from monitoramento_cpd.impressora_scraper.Requisicao_threads import Requisicao_threads
+from impressora_scraper.Requisicao_threads import Requisicao_threads
 from beartype import beartype
 logging.basicConfig()
 logger = logging.getLogger("Scraper")

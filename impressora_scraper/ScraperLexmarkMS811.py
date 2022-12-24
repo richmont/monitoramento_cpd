@@ -1,8 +1,8 @@
 from cgitb import text
 from bs4 import BeautifulSoup
 import logging
-from monitoramento_cpd.impressora_scraper.Requisicao_threads import Requisicao_threads
-from monitoramento_cpd.impressora_scraper.Scraper import Scraper
+from impressora_scraper.Requisicao_threads import Requisicao_threads
+from impressora_scraper.Scraper import Scraper
 from beartype import beartype
 import re
 
