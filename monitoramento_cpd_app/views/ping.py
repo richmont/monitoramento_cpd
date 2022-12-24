@@ -3,7 +3,7 @@ import sys
  
 # setting path
 #sys.path.append('...')
-from monitoramento_cpd.ping_threads.Ping_threads import Ping_threads
+from  ping_threads.Ping_threads import Ping_threads
 
 def all(request):
     lista_ips = []

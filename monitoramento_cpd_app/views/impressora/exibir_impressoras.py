@@ -3,9 +3,9 @@ from django.forms import ValidationError
 from monitoramento_cpd_app.models.impressoras import Impressora, lista_modelos_impressora
 from monitoramento_cpd_app.forms.form_cadastrar_impressora import ImpressoraForm
 from django.contrib import messages
-from monitoramento_cpd.impressora_scraper.ScraperLexmarkMS811 import ScraperLexmarkMS811
-from monitoramento_cpd.impressora_scraper.Scraper import Scraper
-from monitoramento_cpd.ping_threads.Ping_threads import Ping_threads
+from  impressora_scraper.ScraperLexmarkMS811 import ScraperLexmarkMS811
+from  impressora_scraper.Scraper import Scraper
+from  ping_threads.Ping_threads import Ping_threads
 import logging
 logging.basicConfig()
 logger = logging.getLogger("View Exibir impressoras")

@@ -3,7 +3,7 @@ from django.forms import ValidationError
 from monitoramento_cpd_app.models.workstations import Workstation, lista_modelos_workstation
 from monitoramento_cpd_app.forms.form_cadastrar_workstation import WorkstationForm
 from django.contrib import messages
-from monitoramento_cpd.ping_threads.Ping_threads import Ping_threads
+from  ping_threads.Ping_threads import Ping_threads
 
 
 def workstations(request):
