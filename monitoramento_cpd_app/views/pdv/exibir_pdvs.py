@@ -163,14 +163,16 @@ def pdvs(request):
             r_iniciar_pdv = g_reiniciar.executar(
                 destino_dados=dados_pdv, 
                 comando=COMANDO_INICIAR_PDV)
-        except Nested_SSH.erros.FalhaConexao:
             messages.add_message(request, messages.INFO,
                                     f"PDV {pdv_reiniciar['checkout']}, falhou a conexão, verifique endereço")
+        except Nested_SSH.erros.FalhaConexao:
+            messages.add_message(request, messages.ERROR,
+                                    f"PDV {pdv_reiniciar['checkout']}, falhou a conexão, verifique endereço")
         except Nested_SSH.erros.FalhaAutenticacao:
-            messages.add_message(request, messages.INFO,
+            messages.add_message(request, messages.ERROR,
                                     f"Reinício do PDV {pdv_reiniciar['checkout']}, falhou por login ou senha incorretos")
         except Nested_SSH.erros.EnderecoIncorreto:
-            messages.add_message(request, messages.INFO,
+            messages.add_message(request, messages.ERROR,
                                     f"Reinício do PDV {pdv_reiniciar['checkout']}, por endereço incorreto")
         except KeyError:
             return render(request,
