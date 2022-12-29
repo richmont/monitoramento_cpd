@@ -9,6 +9,7 @@ from conf.configuracoes import COMANDO_COLETAR_SERIAL_PINPAD, COMANDO_INICIAR_PD
 import paramiko
 import socket
 import logging
+import time
 logger = logging.getLogger("")
 logging.basicConfig(level=logging.INFO)
 
@@ -160,11 +161,12 @@ def pdvs(request):
             r_parar_pdv = g_reiniciar.executar(
                 destino_dados=dados_pdv, 
                 comando=COMANDO_PARAR_PDV)
+            time.sleep(3)
             r_iniciar_pdv = g_reiniciar.executar(
                 destino_dados=dados_pdv, 
                 comando=COMANDO_INICIAR_PDV)
             messages.add_message(request, messages.INFO,
-                                    f"PDV {pdv_reiniciar['checkout']}, falhou a conexão, verifique endereço")
+                                    f"PDV {pdv_reiniciar['checkout']} reiniciado com sucesso!")
         except Nested_SSH.erros.FalhaConexao:
             messages.add_message(request, messages.ERROR,
                                     f"PDV {pdv_reiniciar['checkout']}, falhou a conexão, verifique endereço")
