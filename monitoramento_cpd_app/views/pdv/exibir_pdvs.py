@@ -226,10 +226,22 @@ def pdvs(request):
             )
         
         # posso logo mandar o comando pra coletar o número do pinpad né
-        t_n = t_Nested_SSH(lista_destinos, gateway=dados_gateway, comando=str(COMANDO_COLETAR_SERIAL_PINPAD))
+        try:
+            t_n = t_Nested_SSH(lista_destinos, gateway=dados_gateway, comando=str(COMANDO_COLETAR_SERIAL_PINPAD))
+        except Nested_SSH.erros.FalhaAutenticacao:
+            # apaga o valor na sessão pra hostname_gateway fazendo o template renderizar o form
+            request.session["hostname_gateway"] = None
+            
+            return render(request,
+            'exibir_pdvs.html',
+            {
+                "form_pdv": form_pdv,
+                "lista_tipos_pdv": lista_tipos_pdv,
+                "form_login_gateway": form_login_gateway
+                }
+            )
         # para cada resposta dos comandos, constrói a lista dos PDVs
         lista_pdvs = list()
-        print(t_n.respostas)
         for resposta in t_n.respostas:
             if resposta["conectou"]:
                 # quebra a resposta usando o \n para quando há múltiplos seriais no diretório
