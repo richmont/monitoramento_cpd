@@ -44,8 +44,14 @@
       </div>
   </div>
   <!-- fim modal para fazer login no gateway  -->
-  <!-- Ativar modal para login gateway -->
-  <div class="d-flex justify-content-center mt-5">
+ 
+
+
+<!-- Modal para criar PDV -->
+{% if not request.session.hostname_gateway %}
+<p>Sessão não detectada</p>
+ <!-- Ativar modal para login gateway -->
+ <div class="d-flex justify-content-center mt-5">
     <button type="button" class="btn btn-secondary w-25 bg-gradient rounded-buttom bg-dark" data-bs-toggle="modal" data-bs-target="#ModalLoginGateway">
         <i class="material-icons">
             add
@@ -56,11 +62,6 @@
                 Login Gateway
     </button>
 </div>
-
-
-<!-- Modal para criar PDV -->
-{% if not request.session.hostname_gateway %}
-<p>Sessão não detectada</p>
 <script>
     // Ativa modal automaticamente
     var e_ModalLoginGateway = new bootstrap.Modal(document.getElementById('ModalLoginGateway'))
