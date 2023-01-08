@@ -38,7 +38,7 @@ class Ping_threads():
             if os.name == 'nt':
                 args = f"ping -n 1 -w 1 {ip}"
             elif os.name == 'posix':
-                args = f"ping -s 1 -c 1 -w 1 {ip}"
+                args = ["/usr/bin/ping", "-s 1", "-c 1","-w 1", ip]
             proc = subprocess.Popen(args,
                                     shell=False,
                                     stdout=subprocess.PIPE)
