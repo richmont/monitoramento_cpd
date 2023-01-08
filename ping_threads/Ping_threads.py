@@ -2,6 +2,7 @@ import queue
 from threading import Thread
 import subprocess
 import time
+import os
 
 
 class Ping_threads():
@@ -33,7 +34,11 @@ class Ping_threads():
         """
         while True:
             ip = self.fila_ips.get()
-            args = f"ping -n 1 -w 1 {ip}"
+            
+            if os.name == 'nt':
+                args = f"ping -n 1 -w 1 {ip}"
+            elif os.name == 'posix':
+                args = f"ping -s 1 -c 1 -w 1 {ip}"
             proc = subprocess.Popen(args,
                                     shell=False,
                                     stdout=subprocess.PIPE)
