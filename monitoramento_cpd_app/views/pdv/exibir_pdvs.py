@@ -246,6 +246,16 @@ def pdvs(request):
                 "form_login_gateway": form_login_gateway
                 }
             )
+        except Nested_SSH.erros.EnderecoIncorreto:
+            # força a logar novamente no gateway
+            return render(request,
+            'exibir_pdvs.html',
+            {
+                "form_pdv": form_pdv,
+                "lista_tipos_pdv": lista_tipos_pdv,
+                "form_login_gateway": form_login_gateway
+                }
+            )
         # para cada resposta dos comandos, constrói a lista dos PDVs
         lista_pdvs = list()
         for resposta in t_n.respostas:

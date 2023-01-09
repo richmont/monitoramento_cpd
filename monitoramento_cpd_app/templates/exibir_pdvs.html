@@ -80,6 +80,43 @@
                     Cadastrar PDV
         </button>
     </div>
+    <!-- Botão para limpar sessão -->
+    <div class="d-flex justify-content-center mt-5">
+        <button type="button" class="btn btn-danger w-25 bg-gradient rounded-buttom" data-bs-toggle="modal" data-bs-target="#ModalLimparSessao">
+            <i class="material-icons">logout</i>
+                    Desconectar do gateway
+        </button>
+    </div>
+        
+    
+    
+    <!-- Modal para limpar sessão -->
+    <div class="modal fade" id="ModalLimparSessao" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="ModalLimparSessaoLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="ModalLimparSessaoLabel">Desconectar do gateway</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="form" action = "" method = "post" name="form">
+                    <div id="form-limpar-sessao" class="form-limpar-sessao">
+                        {% csrf_token %}
+                        <p>Usuário {{request.session.usuario_ssh_gateway}}</p>
+                        <p>Tem certeza que deseja desconectar do gateway {{request.session.hostname_gateway}}:{{request.session.porta_ssh_gateway}}?</p>
+    
+                        <input name="operacao" class="invisible" value="limpar_sessao"></input>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal"><i class="material-icons">close</i>Fechar</button>
+                            <button type="submit" class="btn btn-danger"><i class="material-icons">logout</i>Desconectar</button>
+                        </div>
+                    </div>
+            </form>
+            </div>
+        </div>
+        </div>
+    </div>
+    <!-- fim modal para criar PDV -->
     
 
     <!-- Modal para criar PDV -->
