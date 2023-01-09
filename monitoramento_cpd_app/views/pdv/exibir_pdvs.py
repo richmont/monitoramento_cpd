@@ -119,7 +119,7 @@ def pdvs(request):
         
         hostname_gateway = str(request.POST["hostname_gateway"])
         usuario_ssh_gateway = str(request.POST["login_gateway"])
-        porta_ssh_gateway = str(request.POST["porta_gateway"])
+        porta_ssh_gateway = int(request.POST["porta_gateway"])
         senha_ssh_gateway = str(request.POST["senha_gateway"])
         
         if tentar_login_ssh(hostname_gateway, usuario_ssh_gateway, porta_ssh_gateway, senha_ssh_gateway):
@@ -186,7 +186,13 @@ def pdvs(request):
                 }
             )
         
-    
+    def limpar_sessao():
+        request.session["hostname_gateway"] = None
+        request.session["usuario_ssh_gateway"] = None
+        request.session["porta_ssh_gateway"] = None
+        request.session["senha_ssh_gateway"] = None
+        messages.add_message(request, messages.INFO, f"Sessão limpa com sucesso, faça login novamente")
+
     # formulário de cadastro do pdv
     form_pdv = FormPDV()
     form_login_gateway = FormLoginGateway()
@@ -290,6 +296,8 @@ def pdvs(request):
             editar_pdv()
         if request.POST["operacao"] == 'reiniciar':
             reiniciar_pdv()
+        if request.POST["operacao"] == 'limpar_sessao':
+            limpar_sessao()
 
     dict_pdvs = exibir_pdvs()
     return render(request,

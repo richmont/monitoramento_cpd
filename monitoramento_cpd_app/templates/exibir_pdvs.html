@@ -49,7 +49,7 @@
 
 <!-- Modal para criar PDV -->
 {% if not request.session.hostname_gateway %}
-<p>Sessão não detectada</p>
+<p class="d-flex">Sessão não detectada</p>
  <!-- Ativar modal para login gateway -->
  <div class="d-flex justify-content-center mt-5">
     <button type="button" class="btn btn-secondary w-25 bg-gradient rounded-buttom bg-dark" data-bs-toggle="modal" data-bs-target="#ModalLoginGateway">
@@ -154,8 +154,8 @@
                 </div>
                         <p class="PDV_checkout"><i class="material-icons">home_work</i> {{ PDV.checkout }}</p>
                         <p class="PDV_ip "><i class="material-icons">public</i>{{ PDV.IP }}</p>
-                        <p class="PDV_conexao_pinpad"><i class="material-icons">group</i> {{ PDV.conexao_pinpad }}</p>
-                        <p class="PDV_num_serial_pinpad"><i class="material-icons">group</i> {{ PDV.num_serial_pinpad }}</p>
+                        <p class="PDV_conexao_pinpad"><i class="material-icons">settings_input_hdmi</i> {{ PDV.conexao_pinpad }}</p>
+                        <p class="PDV_num_serial_pinpad"><i class="material-icons">pin</i> {{ PDV.num_serial_pinpad }}</p>
                         <p class="PDV_tipo_pdv"><i class="material-icons">devices</i> {{ PDV.tipo_pdv }}</p>
                     </li>
                     </div> <!-- Fecha a div de PDV -->
