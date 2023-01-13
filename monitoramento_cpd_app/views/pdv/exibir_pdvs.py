@@ -10,6 +10,7 @@ import paramiko
 import socket
 import logging
 import time
+import re
 logger = logging.getLogger("")
 logging.basicConfig(level=logging.INFO)
 
@@ -233,7 +234,7 @@ def pdvs(request):
         
         # posso logo mandar o comando pra coletar o número do pinpad né
         try:
-            t_n = t_Nested_SSH(lista_destinos, gateway=dados_gateway, comando=str(COMANDO_COLETAR_SERIAL_PINPAD))
+            t_n = t_Nested_SSH(lista_destinos, gateway=dados_gateway, comando=str(COMANDO_COLETAR_SERIAL_PINPAD), num_threads=30)
         except Nested_SSH.erros.FalhaAutenticacao:
             # apaga o valor na sessão pra hostname_gateway fazendo o template renderizar o form
             request.session["hostname_gateway"] = None
@@ -292,8 +293,23 @@ def pdvs(request):
                     "online": "offline"
                 }
                 lista_pdvs.append(p)
+
         
-        return lista_pdvs
+        # expressão regular transforma valores numéricos em uma lista a partir do IP
+        # lista é convertida em string, e em inteiro logo em seguida
+        # permitindo que a lista inteira seja ordenada pelo endereço IP
+        lista_ordenada_por_checkout = sorted(
+            lista_pdvs, 
+            key=lambda pdv: int(
+                "".join(
+                    re.findall("[0-9]", 
+                               pdv["IP"]
+                               )
+                    )
+                )
+            )
+        
+        return lista_ordenada_por_checkout
     
     if request.method == "POST":
         if request.POST["operacao"] == 'login_servidor_gateway':

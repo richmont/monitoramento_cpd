@@ -23,6 +23,12 @@ Por exemplo:
 ```
 Prossiga apenas se ativou com sucesso o ambiente virtual  
 
+#### No Linux
+Antes de começar, certifique-se que possui as dependências instaladas (Debian):  
+python3-dev
+libmariadb-dev
+São necessários para compilação do pacote cliente mysql do python.
+
 ### Clone o projeto
 Clone usando git dentro do ambiente virtual já ativado:  
 ```bash
