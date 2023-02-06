@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 # imported views
-from monitoramento_cpd_app.views import hello_world
+from monitoramento_cpd_app.views import exibir_inicial
 from monitoramento_cpd_app.views import ping
 from monitoramento_cpd_app.views.impressora import cadastro_impressora
 from monitoramento_cpd_app.views.impressora import exibir_impressoras
@@ -26,7 +26,7 @@ from monitoramento_cpd_app.views.pdv import exibir_pdvs
 urlpatterns = [
     path('admin/', admin.site.urls),
     # configured the url
-    path('', hello_world.index, name="homepage"),
+    path('', exibir_inicial.index, name="homepage"),
     # path('ping',ping.all, name="ping_all"),
     # path('impressoras/cadastro_impressora', cadastro_impressora.cadastrar_impressora, name="cadastro_impressora"),
     path('impressoras/', exibir_impressoras.impressoras, name="exibir_impressoras"),
