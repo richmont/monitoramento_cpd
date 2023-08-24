@@ -119,7 +119,7 @@ MYSQL_BANCO_NOME=monitoramento_cpd
 ### Tabelas
 Execute a migração das tabelas do sistema com o comando:
 ```bash
-    python migrate.py migrate
+    python manage.py migrate
 ```
 Aguarde concluir, caso receba mensagens de erro, verifique se a conexão do banco de dados está correta, e se a database possui as permissões necessárias.
 ### Iniciando servidor
